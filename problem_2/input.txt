@@ -1,0 +1,59 @@
+#include <iostream>
+#include <fstream>
+#include <cctype>
+using namespace std;
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    char ch;
+
+    // write to output.txt without spaces
+    while (fin.get(ch))
+    {
+        if (!isspace(ch))
+        {
+            fout << ch;
+        }
+    }
+
+    fin.close();
+    fout.close();
+
+    // write numbers to numbers.txt
+    fin.open("input.txt");
+    string token;
+
+    while (fin >> token)
+    {
+        string number = "";
+
+        for (char c : token)
+        {
+            if (isdigit(c))
+            {
+                number += c;
+            }
+            else
+            {
+                if (!number.empty())
+                {
+                    cout << number << endl;
+                    number = "";
+                }
+            }
+        }
+
+        // Print number if token ends with a digit
+        if (!number.empty())
+        {
+            cout << number << endl;
+        }
+    }
+
+    fin.close();
+
+    return 0;
+}
