@@ -2,71 +2,70 @@
 #include <vector>
 using namespace std;
 
-int main()
+int main(int argc, char const *argv[])
 {
     string input;
-    cout << "Enter productions (e.g. ab|ac|ad): ";
+    string temp = "";
+    vector<string> prod;
+
+    cout << "Productions: ";
     cin >> input;
 
-    vector<string> prod;
-    string temp = "";
-
-    // Split by '|'
-    for (char ch : input)
+    // split by |
+    for (size_t i = 0; i < input.size(); i++)
     {
-        if (ch == '|')
+        if (input[i] == '|')
         {
             prod.push_back(temp);
             temp = "";
         }
         else
         {
-            temp += ch;
+            temp += input[i];
         }
     }
     prod.push_back(temp);
 
-    // Find longest common prefix
+    // logest common prefix
     string prefix = prod[0];
-
-    for (int i = 1; i < prod.size(); i++)
+    for (size_t i = 1; i < prod.size(); i++)
     {
         int j = 0;
 
-        while (j < prefix.length() &&
-               j < prod[i].length() &&
-               prefix[j] == prod[i][j])
+        while (j < prefix.size() && j < prod[i].size() && prefix[j] == prod[i][j])
         {
             j++;
         }
 
         prefix = prefix.substr(0, j);
-    } 
+    }
 
     if (prefix.empty())
     {
-        cout << "No Left Factoring Possible." << endl;
+        cout << "No left factoring possible" << endl;
         return 0;
     }
 
-    cout << "\nAfter Left Factoring:\n";
+    // output
     cout << "A -> " << prefix << "A'" << endl;
     cout << "A' -> ";
 
-    for (int i = 0; i < prod.size(); i++)
+    for (size_t i = 0; i < prod.size(); i++)
     {
-        string remain = prod[i].substr(prefix.length());
+        string remain = prod[i].substr(prefix.size());
 
         if (remain.empty())
-            remain = "ε";
+        {
+            remain = "#";
+        }
 
         cout << remain;
 
         if (i != prod.size() - 1)
+        {
             cout << " | ";
+        }
     }
-
-    cout << endl;
 
     return 0;
 }
